@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Enigma de Martí</title>
+
+<style>
+  :root{
+    --ink:#161a1f;
+    --paper:#f2ead9;
+    --paper-dim:#e6dcc4;
+    --blood:#8c2f2f;
+    --brass:#a8843f;
+    --line:#2c333d;
+    --ok:#3f6b4a;
+  }
+
+  *{
+    box-sizing:border-box;
+  }
+
+  html,body{
+    margin:0;
+    padding:0;
+  }
+
+  html{
+    min-height:100%;
+    -webkit-text-size-adjust:100%;
+  }
+
+  body{
+    background:var(--ink);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(168,132,63,0.10), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(140,47,47,0.12), transparent 45%);
+    color:var(--paper);
+    font-family:"Georgia", "Iowan Old Style", serif;
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    padding:0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  }
+
+  .app{
+    width:100%;
+    max-width:480px;
+    min-height:100vh;
+    min-height:100dvh;
+    background:var(--paper);
+    color:var(--ink);
+    position:relative;
+    box-shadow:0 0 60px rgba(0,0,0,0.6);
+    display:flex;
+    flex-direction:column;
+  }
+
+  header{
+    padding:22px 22px 16px;
+    border-bottom:3px double var(--line);
+    background:var(--paper-dim);
+    text-align:center;
+  }
+
+  header .eyebrow{
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-size:11px;
+    font-family:"Courier New", monospace;
+    color:var(--blood);
+  }
+
+  header h1{
+    margin:6px 0 4px;
+    font-size:24px;
+    letter-spacing:.02em;
+  }
+
+  header .sub{
+    font-family:"Courier New", monospace;
+    font-size:12px;
+    color:#4a4a4a;
+  }
+
+  .timerbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 22px;
+    font-family:"Courier New", monospace;
+    font-size:13px;
+    background:var(--ink);
+    color:var(--paper);
+    letter-spacing:.04em;
+  }
+
+  .timerbar .stage-count{
+    opacity:.7;
+  }
+
+  main{
+    flex:1;
+    padding:24px 22px 40px;
+  }
+
+  .stamp{
+    display:inline-block;
+    border:2px solid var(--blood);
+    color:var(--blood);
+    font-family:"Courier New", monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    padding:3px 8px;
+    transform:rotate(-2deg);
+    margin-bottom:14px;
+  }
+
+  h2{
+    font-size:19px;
+    margin:0 0 12px;
+    line-height:1.3;
+  }
+
+  p{
+    line-height:1.55;
+    font-size:15px;
+    margin:0 0 14px;
+  }
+
+  .card{
+    background:rgba(255,255,255,0.5);
+    border:1px solid rgba(0,0,0,0.15);
+    border-left:4px solid var(--brass);
+    padding:16px;
+    margin:16px 0;
+  }
+
+  .card.callout{
+    border-left-color:var(--blood);
+  }
+
+  .card.trivia{
+    border-left-color:var(--ok);
+    font-style:italic;
+    font-size:13.5px;
+  }
+
+  label{
+    display:block;
+    font-family:"Courier New", monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:6px;
+    color:#4a4a4a;
+  }
+
+  input[type=text]{
+    width:100%;
+    padding:12px 14px;
+    font-size:20px;
+    letter-spacing:.1em;
+    font-family:"Courier New", monospace;
+    border:2px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+    text-align:center;
+  }
+
+  input[type=text]:focus{
+    outline:2px solid var(--brass);
+  }
+
+  button{
+    width:100%;
+    margin-top:14px;
+    padding:14px;
+    font-size:15px;
+    font-family:"Georgia", serif;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  button:active{
+    transform:translateY(1px);
+  }
+
+  button.secondary{
+    background:transparent;
+    color:var(--ink);
+    border:2px solid var(--ink);
+  }
+
+  .error{
+    color:var(--blood);
+    font-size:13px;
+    font-family:"Courier New", monospace;
+    margin-top:8px;
+    min-height:16px;
+  }
+
+  .phone{
+    font-size:28px;
+    font-family:"Courier New", monospace;
+    letter-spacing:.05em;
+    text-align:center;
+    padding:14px 0;
+  }
+
+  .location-name{
+    font-size:22px;
+    text-align:center;
+    margin:6px 0 2px;
+  }
+
+  .center{
+    text-align:center;
+  }
+
+  .dim{
+    color:#5a5a5a;
+    font-size:13px;
+  }
+
+  video{
+    display:block;
+    width:100%;
+    max-height:60vh;
+    background:#000;
+    border:2px solid var(--line);
+    margin-bottom:6px;
+  }
+
+  footer{
+    padding:14px 22px 22px;
+    font-family:"Courier New", monospace;
+    font-size:10px;
+    color:#6a6a6a;
+    text-align:center;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="app" id="app"></div>
+
+<script>
+
+const STAGES = [
+
+  {
+    id: 1,
+    placeName: "Plaza de Cibeles",
+
+    placeQuestion: "Escucha a Claudia. Cuando termine su historia, responde su pregunta. La respuesta deberá tener 4 dígitos.",
+
+    placeCode: "1936",
+
+    video: {
+      url: "https://github.com/claudialaorga/El-enigma-de-Marti/raw/refs/heads/main/pistaTill.mp4",
+      intro: "Till está también metido en el ajo, escucha lo que tiene que decirte.",
+      confirmLabel: "Ya he visto el vídeo"
+    },
+
+    destinationQuestion: "¿A dónde nos dirigimos?",
+    destinationAnswer: "Callao",
+    nextPlaceName: "Callao"
+  },
+
+  {
+    id: 2,
+    placeName: "Callao",
+
+    placeClue: "Dos colores son especialmente importantes en este mismo lugar. No adornan coronas ni collares. No descansan en vitrinas. Viajan sin cesar bajo tus pies, cruzándose una y otra vez en el corazón de Madrid. Si quieres encontrar la siguiente combinación, primero deberás descubrir cuáles son esos dos colores. La tabla periódica te ayudará. Pista: Es una cifra de 4 dígitos.",
+
+    placeCode: "1429",
+
+    video: {
+      url: "https://github.com/claudialaorga/El-enigma-de-Marti/raw/refs/heads/main/pistaGema.mp4",
+      intro: "Gema está en modo delulu. Parece que sabe algo",
+      confirmLabel: "Ya he visto el vídeo"
+    },
+
+    destinationQuestion: "¿A dónde nos dirigimos?",
+    destinationAnswer: "Puerta del Sol",
+    nextPlaceName: "Puerta del Sol"
+  },
+
+  {
+    id: 3,
+    placeName: "Puerta del Sol",
+
+    placeClue: "Busca la placa del Kilómetro 0, justo frente a la Real Casa de Correos. Cuenta cuántas letras tiene la palabra grabada más grande.",
+
+    placeCode: "10",
+
+    video: {
+      url: "https://github.com/claudialaorga/El-enigma-de-Marti/raw/refs/heads/main/pistaKilian.mp4",
+      intro: "Kilian sabe algo más del caso... Contactando con Alemania...",
+      confirmLabel: "Ya he visto el vídeo"
+    },
+
+    destinationQuestion: "¿A dónde nos dirigimos?",
+    destinationAnswer: "Café Berlín",
+    nextPlaceName: "Café Berlín"
+  },
+
+  {
+    id: 4,
+    placeName: "Café Berlín",
+
+    placeQuestion: "Esta canción es emblemática y será representada el 30 de agosto en esta misma sala. ¿A quién debes llamar? Escribe solo su nombre.",
+
+    placeCode: "Isabel",
+
+    video: {
+      url: "https://raw.githubusercontent.com/claudialaorga/El-enigma-de-Marti/main/pistaIsabel.mp4",
+      intro: "Isabel, Flo, tu mami, Gerald y los niños tienen algo importante que contarte",
+      confirmLabel: "Ya he visto el vídeo"
+    },
+
+    destinationQuestion: "¿A dónde nos dirigimos?",
+    destinationAnswer: "Plaza de la Villa",
+    nextPlaceName: "Plaza de la Villa"
+  },
+
+  {
+    id: 5,
+    placeName: "Plaza de la Villa",
+
+    placeClue: "¿En qué año nació Federico Chueca? La respuesta es de 4 dígitos.",
+
+    placeCode: "1840",
+
+    video: {
+      url: "https://github.com/claudialaorga/El-enigma-de-Marti/raw/refs/heads/main/PistaMar.mp4",
+      intro: "Mar y Chispas parecen tener información sobre nuestro próximo destino.",
+      confirmLabel: "Ya he visto el vídeo"
+    },
+
+    destinationQuestion: "¿A dónde nos dirigimos?",
+    destinationAnswer: "Plaza de Santa Ana",
+    nextPlaceName: "Plaza de Santa Ana"
+  },
+
+  {
+    id: 6,
+    placeName: "Barrio de las Letras - Plaza de Santa Ana",
+
+    placeQuestion: "Busca en la plaza la estatua del poeta. El nombre de la estatua te da la pista de quién te revelará la próxima pista",
+
+    placeCode: "Federico",
+
+    video: {
+      url: "https://github.com/claudialaorga/El-enigma-de-Marti/raw/refs/heads/main/pistaFede.mp4",
+      intro: "Parece que Fede sabe algo también.",
+      confirmLabel: "Ya he visto el vídeo"
+    },
+
+    callConfirmLabel: "Ya he llamado a Federico",
+
+    destinationQuestion: "¿A dónde nos dirigimos?",
+    destinationAnswer: "Cine Doré"
+  },
+
+  {
+    id: 7,
+    placeName: "Cine Doré",
+
+    placeQuestion: "El miércoles 12 de agosto se proyectará en este cine una película cuyo autor te puede sonar familiar... ¿Quién te dará la próxima pista?",
+
+    placeCode: "Josep María",
+
+    video: {
+      url: "https://github.com/claudialaorga/El-enigma-de-Marti/raw/refs/heads/main/pistaPapa.mp4",
+      intro: "Tu padre y Yolanda están un poco misteriosos, ¿no crees? Por cierto, comentan que se retiran del caso...",
+      confirmLabel: "Ya he visto el vídeo"
+    },
+
+    destinationQuestion: "¿A dónde nos dirigimos?",
+    destinationAnswer: "Retiro",
+
+
+    finalVideo: {
+      url: "https://github.com/claudialaorga/El-enigma-de-Marti/raw/refs/heads/main/Tomas%20falsas_cumple%20Marti%CC%81.mp4",
+      intro: "Antes de nada... Unas tomas falsas",
+      confirmLabel: "Ya he visto las tomas falsas"
+    }
+  }
+
+];
+
+
+const FINAL_MESSAGE =
+  "Retiro, entrando por la cuesta de Claudio Moyano - 20:30 en punto. ¿Estás preparado para conocer la verdad?";
+
+
+let state = {
+  started:false,
+  stageIndex:0,
+  phase:"place",
+  startTime:null,
+  stageStartTime:null,
+  error:""
+};
+
+
+function fmt(ms){
+
+  const s = Math.floor(ms/1000);
+  const m = Math.floor(s/60);
+  const ss = s%60;
+
+  return String(m).padStart(2,"0") + ":" + String(ss).padStart(2,"0");
+}
+
+
+function videoMime(url){
+
+  const ext = String(url)
+    .split(".")
+    .pop()
+    .toLowerCase()
+    .split("?")[0];
+
+  const map = {
+    mp4:"video/mp4",
+    webm:"video/webm",
+    mov:"video/quicktime",
+    wmv:"video/x-ms-wmv",
+    ogg:"video/ogg"
+  };
+
+  return map[ext] || "video/mp4";
+}
+
+
+function normalize(str){
+
+  return String(str)
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+
+function render(){
+
+  const app = document.getElementById("app");
+
+  const totalElapsed =
+    state.startTime
+      ? Date.now() - state.startTime
+      : 0;
+
+  const stageElapsed =
+    state.stageStartTime
+      ? Date.now() - state.stageStartTime
+      : 0;
+
+
+
+
+  if(!state.started){
+
+    app.innerHTML = `
+
+      <header>
+        <div class="eyebrow">Expediente confidencial</div>
+        <h1>El Enigma de Martí</h1>
+        <div class="sub">Investigación en curso</div>
+      </header>
+
+      <main>
+
+        <div class="stamp">Caso abierto</div>
+
+        <h2>
+          Alguien muy querido para ti ha muerto.
+        </h2>
+
+        <p>
+          Tu asesino te reta a descubrirle.
+          Nosotros te ayudaremos — pero solo tú puedes seguir
+          el rastro hasta el final.
+        </p>
+
+        <p class="dim">
+          Toca "Empezar investigación" cuando estés listo en el primer lugar.
+        </p>
+
+        <button onclick="startGame()">
+          Empezar investigación
+        </button>
+
+      </main>
+
+      <footer>
+        EL ENIGMA DE MARTÍ
+      </footer>
+
+    `;
+
+    return;
+  }
+
+
+
+
+  if(state.stageIndex >= STAGES.length){
+
+    app.innerHTML = `
+
+      <header>
+        <div class="eyebrow">Expediente confidencial</div>
+        <h1>El Enigma de Martí</h1>
+      </header>
+
+      <div class="timerbar">
+
+        <span>
+          ⏱ ${fmt(totalElapsed)}
+        </span>
+
+        <span class="stage-count">
+          Caso resuelto
+        </span>
+
+      </div>
+
+      <main>
+
+        <div
+          class="stamp"
+          style="border-color:var(--ok);color:var(--ok);"
+        >
+          Última pista
+        </div>
+
+        <h2 class="location-name">
+          ${FINAL_MESSAGE}
+        </h2>
+
+      </main>
+
+      <footer>
+        EL ENIGMA DE MARTÍ · USO PRIVADO
+      </footer>
+
+    `;
+
+    return;
+  }
+
+
+  const stage = STAGES[state.stageIndex];
+
+  let mainHtml = "";
+
+
+
+
+  if(state.phase === "place"){
+
+    mainHtml = `
+
+      <div class="stamp">
+        Etapa ${stage.id} de ${STAGES.length}
+      </div>
+
+      <h2 class="location-name">
+        ${stage.placeName}
+      </h2>
+
+      ${stage.introPrompt ? `
+        <p class="dim">
+          ${stage.introPrompt}
+        </p>
+      ` : ""}
+
+      ${stage.placeClue ? `
+        <div class="card">
+          <p>
+            ${stage.placeClue}
+          </p>
+        </div>
+      ` : ""}
+
+      ${stage.placeQuestion ? `
+        <div class="card">
+          <p>
+            <strong>
+              ${stage.placeQuestion}
+            </strong>
+          </p>
+        </div>
+      ` : ""}
+
+      <label for="code1">
+        Código del lugar
+      </label>
+
+      <input
+        type="text"
+        id="code1"
+        inputmode="${/^\d+$/.test(String(stage.placeCode)) ? "numeric" : "text"}"
+        autocomplete="off"
+        placeholder="····"
+      >
+
+      <button onclick="checkPlace('${stage.placeCode}')">
+        Introducir código
+      </button>
+
+      <div class="error">
+        ${state.error}
+      </div>
+
+    `;
+  }
+
+
+
+
+  else if(state.phase === "callNudge"){
+
+    mainHtml = `
+
+      <div class="stamp">
+        Etapa ${stage.id} de ${STAGES.length}
+      </div>
+
+      <h2>
+        ${stage.callNudge}
+      </h2>
+
+      <p class="dim center">
+        Cuando hayas hecho la llamada, pulsa el botón.
+      </p>
+
+      <button onclick="confirmCall()">
+        ${stage.callConfirmLabel || "Ya he llamado"}
+      </button>
+
+    `;
+  }
+
+
+  /* FASE: VÍDEO */
+
+  else if(state.phase === "video"){
+
+    mainHtml = `
+
+      <div class="stamp">
+        Etapa ${stage.id} de ${STAGES.length}
+      </div>
+
+      <h2>
+        ${stage.video.intro || "Mensaje de vídeo"}
+      </h2>
+
+      <video controls playsinline>
+
+        <source
+          src="${stage.video.url}"
+          type="${videoMime(stage.video.url)}"
+        >
+
+        Tu navegador no soporta este formato de vídeo.
+
+        <a
+          href="${stage.video.url}"
+          target="_blank"
+          rel="noopener"
+        >
+          Ver vídeo
+        </a>
+
+      </video>
+
+      <button onclick="confirmCall()">
+        ${stage.video.confirmLabel || "Ya he visto el vídeo"}
+      </button>
+
+    `;
+  }
+
+
+  /* FASE: LLAMADA */
+
+  else if(state.phase === "call"){
+
+    mainHtml = `
+
+      <div class="stamp">
+        Etapa ${stage.id} de ${STAGES.length}
+      </div>
+
+      <h2>
+        Código correcto. Llama ahora a:
+      </h2>
+
+      <p
+        class="center"
+        style="font-weight:bold;"
+      >
+        ${stage.callerName}
+      </p>
+
+      <div class="phone">
+        ${stage.callerPhone}
+      </div>
+
+      <div class="card callout">
+
+        <p>
+          <strong>Cuando te respondan:</strong>
+        </p>
+
+        <p>
+          ${stage.puzzleText}
+        </p>
+
+      </div>
+
+      <label for="code2">
+        Código del personaje
+      </label>
+
+      <input
+        type="text"
+        id="code2"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="····"
+      >
+
+      <button onclick="checkPuzzle('${stage.puzzleCode}')">
+        Introducir código
+      </button>
+
+      <div class="error">
+        ${state.error}
+      </div>
+
+    `;
+  }
+
+
+
+
+  else if(state.phase === "destination"){
+
+    mainHtml = `
+
+      <div class="stamp">
+        Etapa ${stage.id} de ${STAGES.length}
+      </div>
+
+      <h2>
+        ${stage.destinationQuestion}
+      </h2>
+
+      <label for="dest">
+        Tu respuesta
+      </label>
+
+      <input
+        type="text"
+        id="dest"
+        autocomplete="off"
+        placeholder="····"
+      >
+
+      <button onclick="checkDestination('${stage.destinationAnswer}')">
+        Confirmar
+      </button>
+
+      <div class="error">
+        ${state.error}
+      </div>
+
+    `;
+  }
+
+
+
+
+  else if(state.phase === "finalVideo"){
+
+    mainHtml = `
+
+      <div class="stamp">
+        Un último mensaje...
+      </div>
+
+      <h2>
+        ${stage.finalVideo.intro}
+      </h2>
+
+      <video controls playsinline>
+
+        <source
+          src="${stage.finalVideo.url}"
+          type="${videoMime(stage.finalVideo.url)}"
+        >
+
+        Tu navegador no soporta este formato de vídeo.
+
+        <a
+          href="${stage.finalVideo.url}"
+          target="_blank"
+          rel="noopener"
+        >
+          Ver vídeo
+        </a>
+
+      </video>
+
+      <button onclick="showFinalMessage()">
+        ${stage.finalVideo.confirmLabel || "Continuar"}
+      </button>
+
+    `;
+  }
+
+
+
+
+  else if(state.phase === "revealed"){
+
+    const isLast =
+      state.stageIndex === STAGES.length - 1;
+
+    mainHtml = `
+
+      <div
+        class="stamp"
+        style="border-color:var(--ok);color:var(--ok);"
+      >
+        Desbloqueado
+      </div>
+
+      <h2 class="location-name">
+        ${stage.nextPlaceName || ""}
+      </h2>
+
+      ${stage.trivia ? `
+        <div class="card trivia">
+          <p>
+            🗺 ${stage.trivia}
+          </p>
+        </div>
+      ` : ""}
+
+      <button onclick="nextStage()">
+        ${isLast ? "Ver última pista" : "Ya estoy en camino"}
+      </button>
+
+    `;
+  }
+
+
+  /* ESTRUCTURA GENERAL */
+
+  app.innerHTML = `
+
+    <header>
+
+      <div class="eyebrow">
+        Expediente confidencial
+      </div>
+
+      <h1>
+        El Enigma de Martí
+      </h1>
+
+      <div class="sub">
+        Investigación en curso
+      </div>
+
+    </header>
+
+    <div class="timerbar">
+
+      <span>
+        ⏱ total ${fmt(totalElapsed)}
+      </span>
+
+      <span class="stage-count">
+        etapa ${fmt(stageElapsed)}
+      </span>
+
+    </div>
+
+    <main>
+      ${mainHtml}
+    </main>
+
+    <footer>
+      EL ENIGMA DE MARTÍ · USO PRIVADO
+    </footer>
+
+  `;
+}
+
+
+/* EMPEZAR */
+
+function startGame(){
+
+  state.started = true;
+
+  state.startTime = Date.now();
+
+  state.stageStartTime = Date.now();
+
+  state.phase = "place";
+
+  render();
+}
+
+
+/* COMPROBAR CÓDIGO DEL LUGAR */
+
+function checkPlace(correct){
+
+  const val =
+    document.getElementById("code1").value.trim();
+
+  const stage =
+    STAGES[state.stageIndex];
+
+
+  if(normalize(val) === normalize(correct)){
+
+    state.error = "";
+
+
+    if(stage.video){
+
+      state.phase = "video";
+
+    }
+
+    else if(stage.callNudge){
+
+      state.phase = "callNudge";
+
+    }
+
+    else{
+
+      state.phase = "call";
+
+    }
+
+  }
+
+  else{
+
+    state.error =
+      "Ese código no abre nada. Vuelve a mirar el detalle.";
+
+  }
+
+  render();
+}
+
+
+
+
+function confirmCall(){
+
+  const stage =
+    STAGES[state.stageIndex];
+
+  state.error = "";
+
+  state.phase =
+    stage.destinationQuestion
+      ? "destination"
+      : "revealed";
+
+  render();
+}
+
+
+/* COMPROBAR PUZZLE */
+
+function checkPuzzle(correct){
+
+  const val =
+    document.getElementById("code2").value.trim();
+
+
+  if(val === String(correct)){
+
+    state.error = "";
+
+    state.phase = "revealed";
+
+  }
+
+  else{
+
+    state.error =
+      "Ese código no coincide. Repite el cálculo con calma.";
+
+  }
+
+  render();
+}
+
+
+
+
+function checkDestination(correct){
+
+  const val =
+    document.getElementById("dest").value;
+
+
+  if(normalize(val) === normalize(correct)){
+
+    state.error = "";
+
+    const stage =
+      STAGES[state.stageIndex];
+
+
+   
+
+    if(stage.finalVideo){
+
+      state.phase = "finalVideo";
+
+    }
+
+    else{
+
+      state.phase = "revealed";
+
+    }
+
+  }
+
+  else{
+
+    state.error =
+      "Esa no es la respuesta. Piénsalo de nuevo.";
+
+  }
+
+  render();
+}
+
+
+
+
+function nextStage(){
+
+  state.stageIndex += 1;
+
+  state.stageStartTime = Date.now();
+
+  state.phase = "place";
+
+  render();
+}
+
+
+
+
+function showFinalMessage(){
+
+
+
+  state.stageIndex = STAGES.length;
+
+  render();
+}
+
+
+
+
+render();
+
+
+
+
+function updateTimers(){
+
+  if(!state.started) return;
+
+
+  const totalEl =
+    document.querySelector(".timerbar span:first-child");
+
+  const stageEl =
+    document.querySelector(".timerbar .stage-count");
+
+
+  if(totalEl){
+
+    totalEl.textContent =
+      "⏱ total " +
+      fmt(Date.now() - state.startTime);
+
+  }
+
+
+  if(stageEl){
+
+    stageEl.textContent =
+      "etapa " +
+      fmt(Date.now() - state.stageStartTime);
+
+  }
+}
+
+
+setInterval(updateTimers, 1000);
+
+</script>
+
+</body>
+</html>
